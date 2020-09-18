@@ -1,14 +1,29 @@
 package com.DoruAreabe.service;
 
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class DBService {
-    private static final String DBLogin="root";
-    private static final String DBpassword="coderslab";
-    private static final String DBUrl="jdbc:mysql://localhost:3306/UserDB?serverTimezone=UTC";
+    private static DataSource dataSource;
 
-    public static Connection getConection() throws SQLException {
-        Connection con = DriverManager.getConnection(DBUrl,DBLogin,DBpassword);
-        return con;
+    public static Connection getConnection() throws SQLException {
+        return getInstance().getConnection();
+    }
+
+    private static DataSource getInstance() {
+        if (dataSource == null) {
+            try {
+                Context initContext = new InitialContext();
+                Context envContext = (Context) initContext.lookup("java:/comp/env");
+                dataSource = (DataSource) envContext.lookup("jdbc/users");
+            } catch (NamingException e) {
+                e.printStackTrace();
+            }
+        }
+        return dataSource;
     }
 }

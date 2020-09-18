@@ -1,6 +1,5 @@
 package com.DoruAreabe.web;
 
-import com.DoruAreabe.entity.User;
 import com.DoruAreabe.service.UserService;
 
 import javax.servlet.ServletException;
@@ -9,17 +8,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "UserList", urlPatterns = {""})
-public class UserList extends HttpServlet {
+@WebServlet(name = "UserAdd",urlPatterns = {"/add"})
+public class UserAdd extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String userName = request.getParameter("userName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        boolean isCreated= UserService.addNewOne(userName,email,password);
+        if(isCreated) request.setAttribute("isCreated",isCreated);
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<User> userList = UserService.listOfAll();
-        request.setAttribute("userList",userList);
-        getServletContext().getRequestDispatcher("/WEB-INF/views/users/UserCRUD.jsp").forward(request,response);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/users/UserAdd.jsp").forward(request,response);
     }
 }

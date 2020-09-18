@@ -17,7 +17,7 @@ public class UserDao {
 
 
     public static User create(User user) {
-        try (Connection con = DBService.getConection()) {
+        try (Connection con = DBService.getConnection()) {
             PreparedStatement preparedStatement = con.prepareStatement(addSQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUserName());
@@ -35,7 +35,7 @@ public class UserDao {
     }
 
     public static User read(int id) {
-        try (Connection con = DBService.getConection()) {
+        try (Connection con = DBService.getConnection()) {
             User user = User.getEmptyUser();
             PreparedStatement preparedStatement = con.prepareStatement(readSQL);
             preparedStatement.setInt(1, id);
@@ -59,7 +59,7 @@ public class UserDao {
             System.out.println("This user dont exist in BD");
             return;
         }
-        try (Connection con = DBService.getConection()) {
+        try (Connection con = DBService.getConnection()) {
             PreparedStatement preparedStatement = con.prepareStatement(updateSQL);
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUserName());
@@ -72,7 +72,7 @@ public class UserDao {
     }
 
     public static void delete(int id) {
-        try (Connection con = DBService.getConection()) {
+        try (Connection con = DBService.getConnection()) {
             PreparedStatement preparedStatement = con.prepareStatement(deleteSQL);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -83,7 +83,7 @@ public class UserDao {
 
     public static List<User> readAll() {
         List<User> listResult = new ArrayList<>();
-        try (Connection con = DBService.getConection()) {
+        try (Connection con = DBService.getConnection()) {
             PreparedStatement preparedStatement = con.prepareStatement(readAllSqL);
             ResultSet result = preparedStatement.executeQuery();
             while(result.next()){
